@@ -5,7 +5,7 @@ import sys
 import pov.align as align
 import pov.sub_matrix as sub_matrix
 
-params = {'tau': 0.0002, 'epsilon': 0.04, 'delta': 0.0002, 'emissionX': 0.2, 'emissionY':
+params = {'tau': 0.0002, 'epsilon': 0.0004, 'delta': 0.0002, 'emissionX': 0.2, 'emissionY':
     0.2}
 
 from pov import __version__
