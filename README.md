@@ -16,7 +16,7 @@ git clone https://github.com/gabefoley/PO_Viterbi
 2. Install requirements
 
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 3. Try a test alignment from the tests folder
