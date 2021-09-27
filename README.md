@@ -28,4 +28,4 @@ python -m pov/__main__.py -a tests/files/simple_seqs/simple_6.fasta -o ./simple_
 This should give you an alignment that looks like this ->
 
 
-![Workflow](https://raw.githubusercontent.com/gabefoley/PO_Viterbi/main/images/alignment.png)
+![Workflow](https://raw.githubusercontent.com/gabefoley/PO_Viterbi/main/images/alignment_small.png)
