@@ -34,21 +34,19 @@ from pov.prob import *
 
 
 class Sequence(object):
-    """ A biological sequence. Stores the sequence itself (as a compact array), 
-    the alphabet (i.e., type of sequence it is), and optionally a name and further 
-    information. """
+    """A biological sequence. Stores the sequence itself (as a compact array),
+    the alphabet (i.e., type of sequence it is), and optionally a name and further
+    information."""
 
     sequence = None  # The array of symbols that make up the sequence
     alphabet = None  # The alphabet from which symbols come
     name = None  # The name (identifier) of a sequence
     info = None  # Other information (free text; e.g. annotations)
     length = None  # The number of symbols that the sequence is composed of
-    gappy = (
-        None
-    )  # True if the sequence has "gaps", i.e. positions that represent deletions relative another sequence
+    gappy = None  # True if the sequence has "gaps", i.e. positions that represent deletions relative another sequence
 
     def __init__(self, sequence, alphabet=None, name="", info="", gappy=False):
-        """ Create a sequence with the sequence data. Specifying the alphabet,
+        """Create a sequence with the sequence data. Specifying the alphabet,
         name and other information about the sequence are all optional.
         The sequence data is immutable (stored as a string).
         Example:
@@ -58,7 +56,7 @@ class Sequence(object):
         >>> myseq.alphabet.symbols
         will output the standard protein alphabet:
         ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q',
-        'R', 'S', 'T', 'V', 'W', 'Y'] """
+        'R', 'S', 'T', 'V', 'W', 'Y']"""
 
         self.sequence = sequence
 
@@ -97,7 +95,7 @@ class Sequence(object):
         self.gappy = gappy
 
     def __len__(self):
-        """ Defines what the "len" operator returns for an instance of Sequence, e.g.
+        """Defines what the "len" operator returns for an instance of Sequence, e.g.
         >>> seq = Sequence('ACGGTAGGA', DNA_Alphabet)
         >>> print (len(seq))
         9
@@ -105,14 +103,14 @@ class Sequence(object):
         return len(self.sequence)
 
     def __str__(self):
-        """ Defines what should be printed when the print statement is used on a Sequence instance """
+        """Defines what should be printed when the print statement is used on a Sequence instance"""
         str = self.name + ": "
         for sym in self:
             str += sym
         return str
 
     def __iter__(self):
-        """ Defines how a Sequence should be "iterated", i.e. what its elements are, e.g.
+        """Defines how a Sequence should be "iterated", i.e. what its elements are, e.g.
         >>> seq = Sequence('AGGAT', DNA_Alphabet)
         >>> for sym in seq:
                 print (sym)
@@ -122,11 +120,11 @@ class Sequence(object):
         return tsyms.__iter__()
 
     def __contains__(self, item):
-        """ Defines what is returned when the "in" operator is used on a Sequence, e.g.
+        """Defines what is returned when the "in" operator is used on a Sequence, e.g.
         >>> seq = Sequence('ACGGTAGGA', DNA_Alphabet)
         >>> print ('T' in seq)
         True
-            which is equivalent to 
+            which is equivalent to
         >>> print (seq.__contains__('T'))
         True
         >>> print ('X' in seq)
@@ -138,8 +136,8 @@ class Sequence(object):
         return False
 
     def __getitem__(self, ndx):
-        """ Retrieve a specified index (or a "slice" of indices) of the sequence data.
-            Calling self.__getitem__(3) is equivalent to self[3] 
+        """Retrieve a specified index (or a "slice" of indices) of the sequence data.
+        Calling self.__getitem__(3) is equivalent to self[3]
         """
         if type(ndx) is slice:
             return "".join(self.sequence[ndx])
@@ -147,7 +145,7 @@ class Sequence(object):
             return self.sequence[ndx]
 
     def writeFasta(self):
-        """ Write one sequence in FASTA format to a string and return it. """
+        """Write one sequence in FASTA format to a string and return it."""
         if (
             parseDefline(self.info)[0] == self.name
         ):  # this sequence was previously "parsed" and info should hold the original header
@@ -162,8 +160,8 @@ class Sequence(object):
         return fasta
 
     def count(self, findme=None):
-        """ Get the number of occurrences of specified symbol findme OR
-            if findme = None, return a dictionary of counts of all symbols in alphabet """
+        """Get the number of occurrences of specified symbol findme OR
+        if findme = None, return a dictionary of counts of all symbols in alphabet"""
         if findme != None:
             cnt = 0
             for sym in self.sequence:
@@ -177,7 +175,7 @@ class Sequence(object):
             return symbolCounts
 
     def getDegapped(self):
-        """ Create the sequence excluding gaps, and provide the corresponding indices for the gapped version, e.g.
+        """Create the sequence excluding gaps, and provide the corresponding indices for the gapped version, e.g.
         >>> gappy = Sequence('AC--TA-GA', DNA_Alphabet, name = 'myseq', gappy = True)
         >>> degapped, indices = gappy.getDegapped()
         >>> print(degapped)
@@ -194,7 +192,7 @@ class Sequence(object):
         return Sequence(newseq, self.alphabet, self.name, self.info, gappy=False), idxs
 
     def find(self, findme, gappy=False):
-        """ Find the position of the specified symbol or sub-sequence """
+        """Find the position of the specified symbol or sub-sequence"""
         if gappy == False or self.gappy == False:
             return "".join(self.sequence).find(findme)
         else:  # if the sequence is gappy AND the function is called with gappy = True THEN run the find on the de-gapped sequence
@@ -210,14 +208,14 @@ Recognize the FASTA format (nothing fancy).
 
 
 def readFasta(string, alphabet=None, ignore=False, gappy=False, parse_defline=True):
-    """ Read the given string as FASTA formatted data and return the list of
-        sequences contained within it.
-        If alphabet is specified, use it, if None (default) then guess it.
-        If ignore is False, errors cause the method to fail.
-        If ignore is True, errors will disregard sequence.
-        If gappy is False (default), sequence cannot contain gaps,
-        if True gaps are accepted and included in the resulting sequences.
-        If parse_defline is False, the name will be set to everything before the first space, else parsing will be attempted."""
+    """Read the given string as FASTA formatted data and return the list of
+    sequences contained within it.
+    If alphabet is specified, use it, if None (default) then guess it.
+    If ignore is False, errors cause the method to fail.
+    If ignore is True, errors will disregard sequence.
+    If gappy is False (default), sequence cannot contain gaps,
+    if True gaps are accepted and included in the resulting sequences.
+    If parse_defline is False, the name will be set to everything before the first space, else parsing will be attempted."""
     seqlist = []  # list of sequences contained in the string
     seqname = None  # name of *current* sequence
     seqinfo = None
@@ -273,14 +271,14 @@ def readFasta(string, alphabet=None, ignore=False, gappy=False, parse_defline=Tr
 
 
 def parseDefline(string):
-    """ Parse the FASTA defline (see http://en.wikipedia.org/wiki/FASTA_format)
-        GenBank, EMBL, etc                gi|gi-number|gb|accession|locus
-        SWISS-PROT, TrEMBL                sp|accession|name
-        ...
-        Return a tuple with
-        [0] primary search key, e.g. UniProt accession, Genbank GI
-        [1] secondary search key, e.g. UniProt name, Genbank accession
-        [2] source, e.g. 'sp' (SwissProt/UniProt), 'tr' (TrEMBL), 'gb' (Genbank)
+    """Parse the FASTA defline (see http://en.wikipedia.org/wiki/FASTA_format)
+    GenBank, EMBL, etc                gi|gi-number|gb|accession|locus
+    SWISS-PROT, TrEMBL                sp|accession|name
+    ...
+    Return a tuple with
+    [0] primary search key, e.g. UniProt accession, Genbank GI
+    [1] secondary search key, e.g. UniProt name, Genbank accession
+    [2] source, e.g. 'sp' (SwissProt/UniProt), 'tr' (TrEMBL), 'gb' (Genbank)
     """
     if len(string) == 0:
         return ("", "", "", "")
@@ -310,14 +308,14 @@ def parseDefline(string):
 def readFastaFile(
     filename, alphabet=None, ignore=False, gappy=False, parse_defline=True
 ):
-    """ Read the given FASTA formatted file and return the list of sequences
-        contained within it. Note that if alphabet is NOT specified, it will take a
-        separate guess for each sequence.
-        If ignore is False, errors cause the method to fail.
-        If ignore is True, errors will disregard sequence.
-        If gappy is False (default), sequence cannot contain gaps,
-        if True gaps are accepted and included in the resulting sequences.
-        If parse_defline is False, the name will be set to everything before the first space, else parsing will be attempted."""
+    """Read the given FASTA formatted file and return the list of sequences
+    contained within it. Note that if alphabet is NOT specified, it will take a
+    separate guess for each sequence.
+    If ignore is False, errors cause the method to fail.
+    If ignore is True, errors will disregard sequence.
+    If gappy is False (default), sequence cannot contain gaps,
+    if True gaps are accepted and included in the resulting sequences.
+    If parse_defline is False, the name will be set to everything before the first space, else parsing will be attempted."""
     fh = open(filename)
     seqlist = []
     batch = ""  # a batch of rows including one or more complete FASTA entries
@@ -342,7 +340,7 @@ def readFastaFile(
 
 
 def writeFastaFile(filename, seqs):
-    """ Write the specified sequences to a FASTA file. """
+    """Write the specified sequences to a FASTA file."""
     fh = open(filename, "w")
     for seq in seqs:
         fh.write(seq.writeFasta())
@@ -350,7 +348,7 @@ def writeFastaFile(filename, seqs):
 
 
 def getMarkov(seqs, order=0):
-    """ Retrieve the Markov stats for a set of sequences. """
+    """Retrieve the Markov stats for a set of sequences."""
     myseqs = seqs
     if seqs is Sequence:
         myseqs = list([seqs])
@@ -390,13 +388,13 @@ def getCount(seqs, findme=None):
 
 
 class Alignment:
-    """ A sequence alignment class. Stores two or more sequences of equal length where
-    one symbol is gap '-' 
+    """A sequence alignment class. Stores two or more sequences of equal length where
+    one symbol is gap '-'
     Example usage:
     >>> seqs = [Sequence('THIS-LI-NE-', Protein_Alphabet, gappy = True), Sequence('--ISALIGNED', Protein_Alphabet, gappy = True)]
     >>> print (Alignment(seqs))
      THIS-LI-NE-
-     --ISALIGNED """
+     --ISALIGNED"""
 
     alignlen = None
     seqs = None
@@ -422,7 +420,7 @@ class Alignment:
         return namelen
 
     def __len__(self):
-        """ Defines what the "len" operator returns for an instance of Alignment, e.g.
+        """Defines what the "len" operator returns for an instance of Alignment, e.g.
         >>> seqs = [Sequence('THIS-LI-NE', Protein_Alphabet, gappy = True), Sequence('--ISALIGNED', Protein_Alphabet, gappy = True)]
         >>> aln = Alignment(seqs)
         >>> print(len(aln))
@@ -431,7 +429,7 @@ class Alignment:
         return len(self.seqs)
 
     def getSize(self):
-        """ Returns the size of an alignment in terms of number of columns """
+        """Returns the size of an alignment in terms of number of columns"""
         return self.alignlen
 
     def __str__(self):
@@ -448,7 +446,7 @@ class Alignment:
         return self.seqs[ndx]
 
     def writeClustal(self, filename=None):
-        """ Write the alignment to a string or file using the Clustal file format. """
+        """Write the alignment to a string or file using the Clustal file format."""
         symbolsPerLine = 60
         maxNameLength = self.getnamelen() + 1
         string = ""
@@ -478,15 +476,15 @@ class Alignment:
         return string
 
     def getProfile(self, pseudo=0.0, countGaps=True):
-        """ Determine the probability matrix from the alignment, assuming
-        that each position is independent of all others. """
+        """Determine the probability matrix from the alignment, assuming
+        that each position is independent of all others."""
         p = IndepJoint([self.alphabet for _ in range(self.alignlen)], pseudo)
         for seq in self.seqs:
             p.observe(seq, 1, countGaps=countGaps)
         return p
 
     def getConsensus(self):
-        """ Construct a consensus sequence. """
+        """Construct a consensus sequence."""
         syms = []
         for col in range(self.alignlen):
             d = Distrib(self.alphabet)
@@ -513,10 +511,10 @@ class Alignment:
         return consensus
 
     def displayConsensus(self, theta1=0.2, theta2=0.05, lowercase=True):
-        """ Display a table with rows for each alignment column, showing
-            column index, entropy, number of gaps, and symbols in order of decreasing probability.
-            theta1 is the threshold for displaying symbols in upper case,
-            theta2 is the threshold for showing symbols at all, and in lower case. """
+        """Display a table with rows for each alignment column, showing
+        column index, entropy, number of gaps, and symbols in order of decreasing probability.
+        theta1 is the threshold for displaying symbols in upper case,
+        theta2 is the threshold for showing symbols at all, and in lower case."""
         print(
             (
                 "Alignment of %d sequences, with %d columns"
@@ -556,10 +554,10 @@ class Alignment:
     def saveConsensus(
         self, myseq, filename, theta1=0.2, theta2=0.05, lowercase=True, compact=False
     ):
-        """ Display a table with rows for each alignment column, showing
-            column index, entropy, number of gaps, and symbols in order of decreasing probability.
-            theta1 is the threshold for displaying symbols in upper case,
-            theta2 is the threshold for showing symbols at all, and in lower case. """
+        """Display a table with rows for each alignment column, showing
+        column index, entropy, number of gaps, and symbols in order of decreasing probability.
+        theta1 is the threshold for displaying symbols in upper case,
+        theta2 is the threshold for showing symbols at all, and in lower case."""
         filename = "".join(e for e in filename if e.isalnum() or e == "_" or e == ".")
         f = open(filename, "w")
         f.write(
@@ -621,8 +619,8 @@ class Alignment:
         f.close()
 
     def calcBackground(self):
-        """ Count the proportion of each amino acid's occurrence in the
-            alignment, and return as a probability distribution. """
+        """Count the proportion of each amino acid's occurrence in the
+        alignment, and return as a probability distribution."""
         p = Distrib(self.alphabet)
         for seq in self.seqs:
             for sym in seq:
@@ -631,8 +629,8 @@ class Alignment:
         return p
 
     def calcSubstMatrix(self, background=None):
-        """ Return a substitutionMatrix whose fg are based on this un-gapped
-        multiple sequence alignment. Scores are given in half-bits. """
+        """Return a substitutionMatrix whose fg are based on this un-gapped
+        multiple sequence alignment. Scores are given in half-bits."""
         # Get a list of the amino acids
         aminoAcids = self.alphabet.symbols
         columns = self.alignlen  # Length of sequences in alignment
@@ -716,8 +714,8 @@ class Alignment:
         for r in range(nseqs):
             curgap = 0  # current gap score (cumulative from previous non-gap position)
             curchr = (
-                0
-            )  # current insertion score (cumulative from previous gap position)
+                0  # current insertion score (cumulative from previous gap position)
+            )
             in_gap = False
             for c in range(self.alignlen):
                 agree_cnt = ngaps[c] if gapmat[r, c] == 1 else (nseqs - ngaps[c])
@@ -743,7 +741,7 @@ class Alignment:
         return entscore, gapscore, insscore
 
     def calcDistances(self, measure, a=1.0):
-        """ Calculate the evolutionary distance between all pairs of sequences
+        """Calculate the evolutionary distance between all pairs of sequences
         in this alignment, using the given measure. Measure can be one of
         'fractional', 'poisson', 'gamma', 'jc' or 'k2p'. If 'gamma' or 'k2p' is
         given, then the parameter a must also be specified (or else it will use
@@ -806,9 +804,9 @@ class Alignment:
         return distmat
 
     def writeHTML(self, filename=None, col_start=None, col_end=None):
-        """ Generate HTML that displays the alignment in color.
-            Requires that the alphabet is annotated with the label 'html-color' (see Sequence.annotateSym)
-            and that each symbol maps to a text string naming the color, e.g. 'blue'
+        """Generate HTML that displays the alignment in color.
+        Requires that the alphabet is annotated with the label 'html-color' (see Sequence.annotateSym)
+        and that each symbol maps to a text string naming the color, e.g. 'blue'
         """
         col_start = col_start or 0
         col_end = col_end or self.alignlen
@@ -879,13 +877,13 @@ class Alignment:
 def saveConsensus(
     aln, theta1=0.99, theta2=0.01, countgaps=False, consensus=True, filename=None
 ):
-    """ Display a table with rows for each alignment column, showing
-        column index, entropy, number of gaps, and symbols in order of decreasing probability.
-        theta1 is the percent threshold for consensus (when achieved, all other symbols are ignored)
-        theta2 is the percent threshold for inclusion (symbols below are ignored).
-        countgaps, if true, count gaps (default false).
-        consensus, if true, always print the consensus symbol.
-        filename is name of file to save the output to (default stdout)."""
+    """Display a table with rows for each alignment column, showing
+    column index, entropy, number of gaps, and symbols in order of decreasing probability.
+    theta1 is the percent threshold for consensus (when achieved, all other symbols are ignored)
+    theta2 is the percent threshold for inclusion (symbols below are ignored).
+    countgaps, if true, count gaps (default false).
+    consensus, if true, always print the consensus symbol.
+    filename is name of file to save the output to (default stdout)."""
     if filename == None:
         f = sys.stdout
     else:
@@ -929,9 +927,9 @@ def saveConsensus(
 
 
 def alignGlobal(seqA, seqB, substMatrix, gap=-1):
-    """ Align seqA with seqB using the Needleman-Wunsch
+    """Align seqA with seqB using the Needleman-Wunsch
     (global) algorithm. subsMatrix is the substitution matrix to use and
-    gap is the linear gap penalty to use. """
+    gap is the linear gap penalty to use."""
     lenA, lenB = len(seqA), len(seqB)
     # Create the scoring matrix (S)
     S = numpy.zeros((lenA + 1, lenB + 1))
@@ -950,12 +948,8 @@ def alignGlobal(seqA, seqB, substMatrix, gap=-1):
             fromLeft = S[i, j - 1] + gap
             S[i, j] = max([match, fromTop, fromLeft])
     # Traceback the optimal alignment
-    alignA = (
-        ""
-    )  # a string for sequence A when aligned (e.g. 'THIS-LI-NE-', initially empty).
-    alignB = (
-        ""
-    )  # a string for sequence B when aligned (e.g. '--ISALIGNED', initially empty).
+    alignA = ""  # a string for sequence A when aligned (e.g. 'THIS-LI-NE-', initially empty).
+    alignB = ""  # a string for sequence B when aligned (e.g. '--ISALIGNED', initially empty).
     # Start at the end (bottom-right corner of S)
     i = lenA
     j = lenB
@@ -998,9 +992,9 @@ def alignGlobal(seqA, seqB, substMatrix, gap=-1):
 
 
 def alignLocal(seqA, seqB, substMatrix, gap=-1):
-    """ Align seqA with seqB using the Smith-Waterman
+    """Align seqA with seqB using the Smith-Waterman
     (local) algorithm. subsMatrix is the substitution matrix to use and
-    gap is the linear gap penalty to use. """
+    gap is the linear gap penalty to use."""
     lenA, lenB = len(seqA), len(seqB)
     # Create the scoring matrix (S)
     S = numpy.zeros((lenA + 1, lenB + 1))
@@ -1060,9 +1054,9 @@ def alignLocal(seqA, seqB, substMatrix, gap=-1):
 
 
 def tripletAlignGlobal(seqA, seqB, seqC, subsMatrix, gap=-1):
-    """ Triplet-wise align this sequence with sequences seqB and seqC,
+    """Triplet-wise align this sequence with sequences seqB and seqC,
     using the Needleman-Wunsch (global) algorithm. subsMatrix is the
-    substitution matrix to use and gap is the linear gap penalty to use. """
+    substitution matrix to use and gap is the linear gap penalty to use."""
 
     lenA, lenB, lenC = [s.length for s in [seqA, seqB, seqC]]
 
@@ -1203,8 +1197,8 @@ def tripletAlignGlobal(seqA, seqB, seqC, subsMatrix, gap=-1):
 
 
 def readClustal(string, alphabet):
-    """ Read a ClustalW2 alignment in the given string and return as an
-    Alignment object. """
+    """Read a ClustalW2 alignment in the given string and return as an
+    Alignment object."""
     seqs = {}  # sequence data
     for line in string.splitlines():
         if (
@@ -1233,8 +1227,8 @@ def readClustal(string, alphabet):
 
 
 def readClustalFile(filename, alphabet):
-    """ Read a ClustalW2 alignment file and return an Alignment object
-    containing the alignment. """
+    """Read a ClustalW2 alignment file and return an Alignment object
+    containing the alignment."""
     fh = open(filename)
     data = fh.read()
     fh.close()
@@ -1255,19 +1249,19 @@ class SubstMatrix:
         self.scoremat = {}
 
     def setScores(self, scoremat):
-        """ Set all scores in one go.
-            scoremat is a (sym1, sym2)-keyed dictionary of scores. """
+        """Set all scores in one go.
+        scoremat is a (sym1, sym2)-keyed dictionary of scores."""
         self.scoremat = scoremat
 
     def _getkey(self, sym1, sym2):
-        """ Construct canonical (unordered) key for two symbols """
+        """Construct canonical (unordered) key for two symbols"""
         if sym1 <= sym2:
             return tuple([sym1, sym2])
         else:
             return tuple([sym2, sym1])
 
     def set(self, sym1, sym2, score):
-        """ Add a score to the substitution matrix """
+        """Add a score to the substitution matrix"""
         self.scoremat[self._getkey(sym1, sym2)] = score
 
     def get(self, sym1, sym2):
@@ -1291,7 +1285,7 @@ class SubstMatrix:
         return string
 
     def writeFile(self, filename):
-        """ Write this substitution matrix to the given file. """
+        """Write this substitution matrix to the given file."""
         fh = open(filename, "w")
         file = ""
         for key in self.scoremat:
@@ -1301,7 +1295,7 @@ class SubstMatrix:
 
 
 def readSubstMatrix(filename, alphabet):
-    """ Read in the substitution matrix stored in the given file. """
+    """Read in the substitution matrix stored in the given file."""
     mat = SubstMatrix(alphabet)
     fh = open(filename, "r")
     data = fh.read()
@@ -1325,12 +1319,12 @@ def readSubstMatrix(filename, alphabet):
 
 class Regexp(object):
 
-    """ A class that defines a sequence pattern in terms of a
+    """A class that defines a sequence pattern in terms of a
     given regular expression, with . indicating any symbol and square brackets
-    indicating a selection. See standard regexp definitions for more. """
+    indicating a selection. See standard regexp definitions for more."""
 
     def __init__(self, pattern):
-        """ Create a new consensus sequence with the given pattern. """
+        """Create a new consensus sequence with the given pattern."""
         try:
             self.pattern = pattern
             self.regex = re.compile(pattern)
@@ -1341,10 +1335,10 @@ class Regexp(object):
         return self.pattern
 
     def search(self, sequence, gappy=False):
-        """ Find matches to the motif in the specified sequence. Returns a list
+        """Find matches to the motif in the specified sequence. Returns a list
         of triples, of the form (position, matched string, score). Note that
         the score is always 1.0 because a regexp either matches
-        or doesn't. """
+        or doesn't."""
         if not type(sequence) is Sequence:
             sequence = Sequence(sequence)
         if gappy == False or sequence.gappy == False:
@@ -1363,13 +1357,13 @@ class Regexp(object):
 
 class PWM(object):
 
-    """ A position weight matrix. """
+    """A position weight matrix."""
 
     def __init__(self, foreground, background=None, start=0, end=None, pseudo=0.0):
-        """ Create a new PWM from the given probability matrix/ces.
+        """Create a new PWM from the given probability matrix/ces.
         foreground: can be either an Alignment, a list of Distrib's or an instance of IndepJoint.
         background: must be a Distrib instance or None (in which case a uniform background will be used)
-        Specify only a section of the matrix to use with start and end. """
+        Specify only a section of the matrix to use with start and end."""
         if isinstance(foreground, Alignment):
             foreground = foreground.getProfile(pseudo=pseudo)
         if isinstance(foreground, IndepJoint):
@@ -1403,8 +1397,8 @@ class PWM(object):
         return self.length
 
     def getRC(self, swap=[("A", "T"), ("C", "G")]):
-        """ Get the reverse complement of the current PWM.
-            Use for DNA sequences with default params.
+        """Get the reverse complement of the current PWM.
+        Use for DNA sequences with default params.
         """
         new_fg = self.fg[::-1]  # backwards
         for s in swap:
@@ -1461,10 +1455,10 @@ class PWM(object):
                 )
 
     def search(self, sequence, lowerBound=0):
-        """ Find matches to the motif in a specified sequence. Returns a list
+        """Find matches to the motif in a specified sequence. Returns a list
         of  results as triples: (position, matched string, score).
         The optional argument lowerBound specifies a lower bound on reported
-        scores. """
+        scores."""
         results = []
         for i in range(len(sequence) - self.length + 1):
             subseq = sequence[i : i + self.length]
@@ -1477,9 +1471,9 @@ class PWM(object):
         return results
 
     def maxscore(self, sequence):
-        """ Find matches to the motif in a specified sequence.
-            Returns the maximum score found in the sequence and its index as a tuple:
-            (maxscore, maxindex) """
+        """Find matches to the motif in a specified sequence.
+        Returns the maximum score found in the sequence and its index as a tuple:
+        (maxscore, maxindex)"""
         maxscore = None
         maxindex = None
         for i in range(len(sequence) - self.length + 1):
@@ -1501,7 +1495,7 @@ class PWM(object):
 
 
 def getSequence(id, database="uniprotkb", start=None, end=None):
-    """ Get the sequence identified by the given ID from the given database
+    """Get the sequence identified by the given ID from the given database
     (e.g. 'uniprotkb', 'refseqn' or 'refseqp'), and return it as a Sequence
     object. An error is caused if the sequence ID is not found. If start and
     end are given, then only that section of the sequence is returned.
@@ -1530,15 +1524,15 @@ def getSequence(id, database="uniprotkb", start=None, end=None):
 
 
 def searchSequences(query, database="uniprot"):
-    """ Search for sequences matching the given query in the given database
-    (must be 'uniprot'), and return a list of sequence IDs. """
+    """Search for sequences matching the given query in the given database
+    (must be 'uniprot'), and return a list of sequence IDs."""
     ids = search(query, limit=None)
     return ids
 
 
 def runClustal(sequences, method="slow"):
-    """ Run a ClustalOmega alignment of the given list of Sequence objects.
-    Return an Alignment object. Method should be one of 'fast' or 'slow'. """
+    """Run a ClustalOmega alignment of the given list of Sequence objects.
+    Return an Alignment object. Method should be one of 'fast' or 'slow'."""
     alpha = None
     for seq in sequences:
         if alpha == None:
@@ -1561,8 +1555,8 @@ def runClustal(sequences, method="slow"):
 
 
 def createTree(alignment, type):
-    """ Run a ClustalW 2 phylogeny tree creation of either a 'Neighbour-joining'
-    or 'UPGMA' type tree from the given multiple sequence Alignment object. """
+    """Run a ClustalW 2 phylogeny tree creation of either a 'Neighbour-joining'
+    or 'UPGMA' type tree from the given multiple sequence Alignment object."""
     if not type in ["Neighbour-joining", "UPGMA"]:
         raise RuntimeError("type must be either 'Neighbour-joining' or 'UPGMA'.")
     serviceName = "clustalw2_phylogeny"
@@ -1581,7 +1575,7 @@ def createTree(alignment, type):
 
 
 def runBLAST(sequence, program="blastp", database="uniprotkb", exp="1e-1"):
-    """ Run a BLAST search of nucleotide mouse databases using the given
+    """Run a BLAST search of nucleotide mouse databases using the given
     sequence as a query. Return a list of matched sequence IDs, in descending
     order of similarity to query sequence.
     program: either blastn (nucleotide) or blastp (protein)

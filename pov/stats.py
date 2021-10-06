@@ -183,7 +183,7 @@ def mean(X):
 
 
 def meanvar(X):
-    """ The mean and variance of the sample. """
+    """The mean and variance of the sample."""
     mu = mean(X)
     dev = 0
     for x in X:
@@ -203,8 +203,7 @@ def getZScores(X):
 
 
 def getPearson(X, Y):
-    """ Pearson correlation coefficient (r). Note that we are using the standard deviation of the sample, NOT the sample standard deviation (see http://en.wikipedia.org/wiki/Standard_deviation).
-    """
+    """Pearson correlation coefficient (r). Note that we are using the standard deviation of the sample, NOT the sample standard deviation (see http://en.wikipedia.org/wiki/Standard_deviation)."""
     (Xmu, Xvar) = meanvar(X)
     (Ymu, Yvar) = meanvar(Y)
     if len(X) != len(Y):

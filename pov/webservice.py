@@ -138,12 +138,12 @@ Note that this service can be slow for queries involving a large number of entri
 
 
 def getGOReport(positives, background=None):
-    """ Generate a complete GO term report for a set of genes (positives).
-        Each GO term is also assigned an enrichment p-value (on basis of background, if provided).
-        Returns a list of tuples (GO_Term_ID[str], Foreground_no[int], Term_description[str]) with no background, OR
-        (GO_Term_ID[str], E-value[float], Foreground_no[int], Background_no[int], Term_description[str]).
-        E-value is a Bonferroni-corrected p-value.
-        """
+    """Generate a complete GO term report for a set of genes (positives).
+    Each GO term is also assigned an enrichment p-value (on basis of background, if provided).
+    Returns a list of tuples (GO_Term_ID[str], Foreground_no[int], Term_description[str]) with no background, OR
+    (GO_Term_ID[str], E-value[float], Foreground_no[int], Background_no[int], Term_description[str]).
+    E-value is a Bonferroni-corrected p-value.
+    """
     pos = set(positives)
     fg_map = getGOTerms(pos)
     fg_list = []
@@ -373,32 +373,32 @@ def getGenes(goterms, taxo=None):
 class EBI(object):
     __email__ = "anon@uq.edu.au"  # to whom emails about jobs should go
     __ebiServiceUrl__ = (
-        "http://www.ebi.ac.uk/Tools/services/rest/"
-    )  # Use UQ mirror when available
+        "http://www.ebi.ac.uk/Tools/services/rest/"  # Use UQ mirror when available
+    )
     __checkInterval__ = 2  # how long to wait between checking job status
 
     def __init__(self, service=None):
-        """ Initialise service session.
+        """Initialise service session.
         service: presently, ncbiblast and clustalw2 are supported. Use None (default) for fetch/idmap jobs.
         """
         self.service = service
         self.lockFile = "%s.lock" % service
 
     def createLock(self):
-        """ Create a lock file to prevent submission of more than 1 job
-        at a time by a single user. """
+        """Create a lock file to prevent submission of more than 1 job
+        at a time by a single user."""
         fh = open(self.lockFile, "w")
         fh.write(self.jobId)
         fh.close()
 
     def removeLock(self):
-        """ Remove the lock file. """
+        """Remove the lock file."""
         os.remove(self.lockFile)
 
     def isLocked(self):
-        """ Check if there is a lock on this service. If there is, check if
+        """Check if there is a lock on this service. If there is, check if
         the job is complete, and if so remove the lock. Return True if still
-        locked and False if not. """
+        locked and False if not."""
         if os.path.exists(self.lockFile):
             fh = open(self.lockFile, "r")
             jobId = fh.read()
@@ -418,8 +418,8 @@ class EBI(object):
     """
 
     def run(self, params):
-        """ Submit a job to the given service with the given parameters, given
-        as a dictionary. Return the jobId. """
+        """Submit a job to the given service with the given parameters, given
+        as a dictionary. Return the jobId."""
         if self.service == None:
             raise RuntimeError("No service specified")
         if self.isLocked():
@@ -447,8 +447,8 @@ class EBI(object):
         return self.jobId
 
     def status(self, jobId=None):
-        """ Check the status of the given job (or the current job if none is
-        specified), and return the result. """
+        """Check the status of the given job (or the current job if none is
+        specified), and return the result."""
         if jobId is None:
             jobId = self.jobId
         url = self.__ebiServiceUrl__ + self.service + "/status/%s" % jobId
@@ -456,13 +456,13 @@ class EBI(object):
         return status
 
     def resultTypes(self):
-        """ Get the available result types. Will only work on a finished job. """
+        """Get the available result types. Will only work on a finished job."""
         url = self.__ebiServiceUrl__ + self.service + "/resulttypes/%s" % self.jobId
         resultTypes = urllib.request.urlopen(url).read().decode("utf-8")
         return resultTypes
 
     def result(self, resultType):
-        """ Get the result of the given job of the specified type. """
+        """Get the result of the given job of the specified type."""
         url = (
             self.__ebiServiceUrl__
             + self.service
@@ -482,8 +482,8 @@ class EBI(object):
         return result
 
     def submit(self, params, resultTypes):
-        """ Submit a new job to the service with the given parameters.
-        Return the output in the specified format. """
+        """Submit a new job to the service with the given parameters.
+        Return the output in the specified format."""
         params["email"] = self.__email__
         self.run(params)
         print(("Submitted new", self.service, "job, jobId:", self.jobId))

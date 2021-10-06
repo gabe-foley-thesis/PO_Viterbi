@@ -2,7 +2,7 @@
 
 This code runs a Partial Order Alignment variant of the Viterbi algorithm.
 
-It isn't currently in development.
+It isn't currently in active development.
 
 
 # Installation
@@ -22,7 +22,7 @@ pip install -r requirements.txt
 3. Try a test alignment from the tests folder
 
 ```
-python -m pov/__main__.py -a tests/files/simple_seqs/simple_6.fasta -o ./simple_6.aln
+python -m pov/poviterbi.py -a tests/files/simple_seqs/simple_6.fasta -o ./simple_6.aln
 ```
 
 This should give you an alignment that looks like this ->

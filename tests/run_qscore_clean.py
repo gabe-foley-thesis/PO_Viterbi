@@ -9,7 +9,6 @@ import csv
 from datetime import datetime
 import itertools
 import pov.alignment_profile as aln_profile
-# import pov.baum_welch as bw
 import pov.sub_matrix as sub_matrix
 import pov.sequence
 from pov.sym import Alphabet
@@ -25,16 +24,6 @@ change_params = {'tau': 0.000000000001, 'epsilon': 0.003, 'delta': 0.000004, 'em
 
 change_params = {'tau': 0.0002, 'epsilon': 0.04, 'delta': 0.0002, 'emissionX': 0.2, 'emissionY':
     0.2}
-
-
-
-# change_params = {'tau': 0.000000000000000000001, 'epsilon': 0.0000000000000000000000002, 'delta':
-#     0.00000000000000000009,
-#                  'emissionX':
-#     0.5,
-#                  'emissionY':
-#                      0.5}
-
 
 log_transform = True
 
@@ -352,10 +341,6 @@ def get_qscores(name):
                     result_value = result.split("=")[1].strip()
                     qscore_dict[method][test_from_line][result_type] = result_value
 
-
-
-
-
     return qscore_dict
 
 def make_graphs(result_dict, *metrics):
@@ -366,18 +351,6 @@ def make_graphs(result_dict, *metrics):
 
 epsilons = [0.006, 0.007, 0.009, 0.1, 0.0001, 0.03]
 deltas = [0.002, 0.005, 0.0005, 0.4, 0.003, 0.04]
-
-# epsilons = [0.07, 0.05, 0.003, 0.004]
-#
-# deltas = [0.05, 0.02, 0.002, 0.001]
-
-# epsilons = [0.003]
-#
-# deltas = [0.05]
-
-# epsilons = [0.07]
-# #
-# deltas = [ 0.001]
 
 for e in epsilons:
     for d in deltas:
@@ -396,11 +369,3 @@ for e in epsilons:
 
             qscore_dict[aln_type] = qscores
             print (qscore_dict)
-
-            # merged_dict = {**qscore_dict, **other_methods_dict}
-
-            # print (merged_dict)
-
-            # make_graphs(merged_dict, "Q", "TC")
-
-

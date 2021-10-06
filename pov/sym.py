@@ -9,20 +9,20 @@ import os
 
 
 class Alphabet(object):
-    """ Defines an immutable biological alphabet (e.g. the alphabet for DNA is AGCT)
+    """Defines an immutable biological alphabet (e.g. the alphabet for DNA is AGCT)
     that can be used to create sequences (see sequence.py).
     We use alphabets to define "tuple" tables, where entries are keyed by combinations
     of symbols of an alphabet (see class TupleStore below).
     Alphabets are used to define probability distributions for stochastic events
-    (see prob.py). """
+    (see prob.py)."""
 
     def __init__(self, symbolString):
-        """ Construct an alphabet from a string of symbols. Lower case characters
+        """Construct an alphabet from a string of symbols. Lower case characters
         will be converted to upper case, repeated characters are ignored.
         Example of constructing the DNA alphabet:
         >>> alpha = Alphabet('ACGTttga')
         >>> alpha.symbols
-        ('A', 'C', 'G', 'T') """
+        ('A', 'C', 'G', 'T')"""
 
         # Add each symbol to the symbols list, one at a time, and ignore doubles (could use "set" here...)
         _symbols = []  # create a temporary list
@@ -46,15 +46,15 @@ class Alphabet(object):
         return self.symbols.__iter__()
 
     def __getitem__(self, ndx):
-        """ Retrieve the symbol(s) at the specified index (or slice of indices) """
+        """Retrieve the symbol(s) at the specified index (or slice of indices)"""
         return self.symbols[ndx]
 
     def __contains__(self, sym):
-        """ Check if the given symbol is a member of the alphabet. """
+        """Check if the given symbol is a member of the alphabet."""
         return sym in self.symbols
 
     def index(self, sym):
-        """ Retrieve the index of the given symbol in the alphabet. """
+        """Retrieve the index of the given symbol in the alphabet."""
         # If the symbol is valid, use the tuple's index function
         if sym in self.symbols:
             syms = self.symbols
@@ -65,7 +65,7 @@ class Alphabet(object):
             )
 
     def __eq__(self, rhs):
-        """ Test if the rhs alphabet is equal to ours. """
+        """Test if the rhs alphabet is equal to ours."""
         if rhs == None:
             return False
         if len(rhs) != len(self):
@@ -77,14 +77,14 @@ class Alphabet(object):
         return True
 
     def isSubsetOf(self, alpha2):
-        """ Test if this alphabet is a subset of alpha2. """
+        """Test if this alphabet is a subset of alpha2."""
         for sym in self.symbols:
             if not alpha2.isValidSymbol(sym):
                 return False
         return True
 
     def isSupersetOf(self, alpha2):
-        """ Test if this alphabet is a superset of alpha2. """
+        """Test if this alphabet is a superset of alpha2."""
         return alpha2.isSubsetOf(self)
 
     def annotateSym(self, label, sym, value):
@@ -208,7 +208,7 @@ Protein_Alphabet.annotateAll(
 
 
 class TupleStore(dict):
-    """ Internal utility class that can be used for associating
+    """Internal utility class that can be used for associating
     a value with ordered n-tuples (n=1..N).
     Read/write functions are defined for instances of this class.
     """
@@ -291,7 +291,7 @@ class TupleStore(dict):
         self.entries[symkey] = value
 
     def __getitem__(self, symkey):
-        """ Return the score matching the given symbols together."""
+        """Return the score matching the given symbols together."""
         assert self.keylen == len(symkey), "Entries must be of the same length"
         try:
             return self.entries[symkey]
@@ -319,7 +319,7 @@ class TupleStore(dict):
             self.entries[symkey] = -ivalue
 
     def getAll(self, symkey=None):
-        """ Return the values matching the given symbols together.
+        """Return the values matching the given symbols together.
         symkey: tuple (or list) of symbols or None (symcount symbol); if tuple is None, all entries are iterated over.
         """
         if symkey == None:
@@ -340,7 +340,7 @@ class TupleStore(dict):
         return TupleEntries(self, tuple([None for _ in range(self.keylen)]))
 
     def items(self, sort=False):
-        """ In a dictionary-like way return all entries as a list of 2-tuples (key, prob).
+        """In a dictionary-like way return all entries as a list of 2-tuples (key, prob).
         If sort is True, entries are sorted in descending order of value.
         Note that this function should NOT be used for big (>5 variables) tables."""
         ret = []
@@ -353,8 +353,7 @@ class TupleStore(dict):
 
 
 class TupleEntries(object):
-    """ Iterator class for multiple entries in a tuple store.
-    """
+    """Iterator class for multiple entries in a tuple store."""
 
     def __init__(self, tuplestore, symkey):
         self.tuplestore = tuplestore
@@ -373,7 +372,7 @@ class TupleEntries(object):
         return self
 
     def __next__(self):
-        """ Step through sequence of entries, either
+        """Step through sequence of entries, either
         (if not sparse) with a step-size based on alphabet-sizes and what symbols are specified or
         (if sparse) with calls to tuple store based on all possible symbol combinations."""
 
@@ -390,8 +389,8 @@ class TupleEntries(object):
 
         # decide which ndx that should be increased (only one)
         self.nextIsLast = (
-            True
-        )  # assume this is the last round (all counters are re-set)
+            True  # assume this is the last round (all counters are re-set)
+        )
         for ndx in self.indices:
             if (
                 self.symcount[ndx] == len(self.tuplestore.alphas[ndx]) - 1
