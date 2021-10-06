@@ -2,7 +2,7 @@ from Bio.SubsMat import MatrixInfo, SeqMat
 
 blosum62 = MatrixInfo.blosum62
 blosum50 = MatrixInfo.blosum50
-from pov.custom_sub_matrix import blosum62LatestProbs_dict, blosum62EstimatedWithX_dict
+from custom_sub_matrix import blosum62LatestProbs_dict, blosum62EstimatedWithX_dict
 
 
 def score_match(pair, matrix):

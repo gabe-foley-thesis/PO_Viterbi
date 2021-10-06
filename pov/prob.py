@@ -4,7 +4,7 @@ Also includes Markov chain and hidden Markov model.
 Uses and depends on "Alphabet" that is used to define discrete random variables.
 """
 import random
-from pov.sym import *
+from sym import *
 import math
 
 #################################################################################################

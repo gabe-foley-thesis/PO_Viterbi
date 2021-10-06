@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
-import pov.sub_matrix as sub_matrix
+import sub_matrix as sub_matrix
 import math
 from collections import defaultdict
 

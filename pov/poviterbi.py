@@ -2,8 +2,8 @@
 
 import argparse
 import sys
-import pov.align as align
-import pov.sub_matrix as sub_matrix
+import align as align
+import sub_matrix as sub_matrix
 
 params = {
     "tau": 0.0002,
@@ -13,7 +13,7 @@ params = {
     "emissionY": 0.2,
 }
 
-from pov import __version__
+from __init__ import __version__
 
 
 def run(args):

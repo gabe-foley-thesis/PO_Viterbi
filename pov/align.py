@@ -1,10 +1,10 @@
-import pov.sequence as sequence
-from pov.sym import Alphabet
-import pov.alignment_profile as aln_profile
-import pov.guide_tree as gt
-import pov.pair_hmm as ph
-import pov.sub_matrix as sub_matrix
-import pov.parameters as parameters
+import sequence as sequence
+from sym import Alphabet
+import alignment_profile as aln_profile
+import guide_tree as gt
+import pair_hmm as ph
+import sub_matrix as sub_matrix
+import parameters as parameters
 
 Protein_Alphabet_wB_X_Z = Alphabet("ABCDEFGHIKLMNPQRSTVWYXZ")
 
